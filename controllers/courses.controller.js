@@ -1,133 +1,3 @@
-<<<<<<< HEAD
-import {Category} from "../models/category.model.js";
-import {User} from "../models/user.model.js";
-import {Course} from "../models/course.model.js"; 
-import uploadImageToCloudinary  from "../utils/imageUploader.js";
-
-
-// Create Course Controller
-const createCourse = async (req, res) => {
-    try { 
-        // 1. FETCH DATA FROM REQUEST BODY 
-        const { courseName, courseDescription, whatYouWillLearn, price, tag , category} = req.body;
-
-        // Extract uploaded file (thumbnail image)
-        const thumbnail = req.files.thumbnail;
-        
-        // 2. VALIDATION - CHECK REQUIRED FIELDS 
-        if (!courseName || !courseDescription || !whatYouWillLearn || !price || !category || !thumbnail || !tag) {
-            return res.status(400).json({
-                success: false,
-                message: 'All fields are required!',
-            });
-        }
-        
-        // 3. FIND INSTRUCTOR DETAILS 
-        const userId = req.user.id; // comes from JWT middleware
-        const instructorDetails = await User.findById(userId);
-        console.log("Instructor Details:", instructorDetails);
-
-        if (!instructorDetails) {
-            return res.status(404).json({
-                success: false,
-                message: 'Instructor Details Not Found!',
-            });
-        }
-        
-        // 4. VALIDATE Category  
-        const categoryDetails = await Category.findById(category);
-        console.log(categoryDetails);
-
-        if (!categoryDetails) {
-            return res.status(404).json({
-                success: false,
-                message: 'Category Details Not Found!',
-            });
-        }
-        
-        // 5. UPLOAD THUMBNAIL TO CLOUDINARY 
-        const thumbnailImage = await uploadImageToCloudinary(
-            thumbnail,
-            process.env.FOLDER_NAME
-        );
-        
-        // 6. CREATE NEW COURSE ENTRY 
-        const newCourse = await Course.create({
-            courseName,
-            courseDescription,
-            instructor: instructorDetails._id,
-            whatYouWillLearn,
-            price,
-            tag: categoryDetails._id,
-            thumbnail: thumbnailImage.secure_url, // cloudinary link
-        });
-        
-        // 7. ADD COURSE TO INSTRUCTOR'S PROFILE 
-        await User.findByIdAndUpdate(
-            instructorDetails._id,
-            {
-                $push: { courses: newCourse._id }
-            },
-            { new: true }
-        );
-        
-        // 8. TASK: UPDATE TAG SCHEMA
-        // Add this course to the tag's course list 
-        await Category.findByIdAndUpdate(
-            categoryDetails._id,
-            {
-                $push: { courses: newCourse._id }
-            },
-            { new: true }
-        );
-        
-        // 9. RETURN SUCCESS RESPONSE 
-        return res.status(200).json({
-            success: true,
-            message: 'Course Created Successfully!',
-            data: newCourse,
-        });
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: 'Failed to created Course!',
-            error: error.message,
-        });
-    }
-};
-
-//showAllCourses controller
-
-const showAllCourses = async (req, res) => {
-    try {
-        const allCourses = await Course.find({}, {
-            courseName: true,
-            price: true,
-            thumbnail: true,
-            instructor: true,
-            ratingAndReviews: true,
-            studentsEnrolled: true
-        }).populate('instructor').exec();
-
-        res.status(200).json({
-            success: true,
-            message: 'Data for All Courses fetched Successfully',
-            allCourses
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            success: false,
-            message: 'Cannot fetch course data',
-            error: error.message
-        });
-    }
-}
-
-//get course details controller
-=======
 import path from "path";
 import { Category } from "../models/category.model.js";
 import { Course } from "../models/course.model.js";
@@ -268,7 +138,6 @@ const createCourse = async (req, res) => {
   }
 };
 
->>>>>>> 89c774f (Initial backend upload)
 const getCourseDetails = async (req, res) => {
   try {
     const { courseId } = req.body;
@@ -279,11 +148,7 @@ const getCourseDetails = async (req, res) => {
           path: "additionalDetails",
         },
       })
-<<<<<<< HEAD
-      .populate("ratingAndReview")
-=======
       .populate("ratingAndReviews")
->>>>>>> 89c774f (Initial backend upload)
       .populate("category")
       .populate({
         path: "courseContent",
@@ -314,12 +179,6 @@ const getCourseDetails = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-export {createCourse , showAllCourses , getCourseDetails};
-
-
-
-=======
 const getAllCourses = async (req, res) => {
   try {
     const allCourses = await Course.find({}).populate("instructor").exec();
@@ -762,4 +621,3 @@ export {
   unenrollCourse,
   getEnrolledCourses
 };
->>>>>>> 89c774f (Initial backend upload)

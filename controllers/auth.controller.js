@@ -1,71 +1,5 @@
 import { User } from "../models/user.model.js";
 import { OTP } from "../models/otp.model.js";
-<<<<<<< HEAD
-// import otpGenerator from "otp-generator";
-import { Profile } from "../models/profile.model.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-// import { encrypt, decrypt } from "../utils/cipher.js";
-// import speakeasy from "speakeasy";
-import mailSender from "../utils/mailSender.js";
- 
-
-//send otp
-// const sendOTP = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-//     // Validation
-//     if (!email) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Email is required",
-//       });
-//     }
-
-//     // Check existing user
-//     const emailCheck = await User.findOne({ email });
-//     if (emailCheck) {
-//       return res.status(403).json({
-//         success: false,
-//         message: "User already exists",
-//       });
-//     }
-
-//     // Generate plain 6-digit OTP
-//     const otp = Math.floor(100000 + Math.random() * 900000).toString(); // e.g., "123456"
-
-//     // Hash OTP before saving
-//     const hashedOtp = await bcrypt.hash(otp, 10);
-
-//     // Save hashed OTP
-//     await OTP.create({
-//       email,
-//       otp: hashedOtp,
-//     });
-
-//     // Send PLAIN OTP via email
-//     await mailSender(
-//       email,
-//       "Verification Email from SkillForge Learning Management System Backend",
-//       otp
-//     );
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "OTP sent successfully",
-//       otp,
-//     });
-
-//   } catch (error) {
-//     console.error("Send OTP Error:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "OTP generation failed",
-//     });
-//   }
-// };
-
-=======
 import otpGenerator from "otp-generator";
 import { Profile } from "../models/profile.model.js";
 import jwt from "jsonwebtoken";
@@ -75,7 +9,6 @@ import speakeasy from "speakeasy";
 import mailSender from "../utils/mailSender.js";
 
 // send otp
->>>>>>> 89c774f (Initial backend upload)
 const sendOTP = async (req, res) => {
   try {
     const { email } = req.body;
@@ -86,57 +19,34 @@ const sendOTP = async (req, res) => {
         message: "Email is required",
       });
     }
-
-<<<<<<< HEAD
-    const emailCheck = await User.findOne({ email });
-    if (emailCheck) {
-      return res.status(403).json({
-=======
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
->>>>>>> 89c774f (Initial backend upload)
         success: false,
         message: "User already exists",
       });
     }
 
-<<<<<<< HEAD
-    // Generate OTP
-=======
+
     // Generate 6 digit OTP
->>>>>>> 89c774f (Initial backend upload)
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Hash OTP
     const hashedOtp = await bcrypt.hash(otp, 10);
 
-<<<<<<< HEAD
-    // Save OTP
-=======
     // Save OTP in DB
->>>>>>> 89c774f (Initial backend upload)
     await OTP.create({
       email,
       otp: hashedOtp,
     });
 
-<<<<<<< HEAD
-    // ✅ SEND EMAIL (CORRECT WAY)
-    await mailSender({
-      email,
-      subject: "Verification Email - SkillForge LMS",
-      body: `<h2>Your OTP is: ${otp}</h2>`,
-    });
-=======
     // Send email
     await mailSender(
       email,
       "Verification Email - SkillForge",
       `<h2>Your OTP is: ${otp}</h2>`
     );
->>>>>>> 89c774f (Initial backend upload)
 
     return res.status(200).json({
       success: true,
@@ -144,129 +54,16 @@ const sendOTP = async (req, res) => {
     });
 
   } catch (error) {
-<<<<<<< HEAD
-    console.error("Send OTP Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "OTP generation failed",
-=======
+
     return res.status(500).json({
       success: false,
       message: "Error while sending OTP",
       error: error.message,
->>>>>>> 89c774f (Initial backend upload)
     });
   }
 };
 
 
-<<<<<<< HEAD
-
-
-const signUp = async (req, res) => {
-  try {
-    // fetch data from user body
-    const {
-      firstName,
-      lastName,
-      password,
-      email,
-      confirmPassword,
-      accountType,
-      contactNumber,
-      otp
-    } = req.body;
-
-    // validation - check required fields
-    if (!firstName || !email || !lastName || !password || !confirmPassword || !otp) {
-      return res.status(403).json({
-        success: false,
-        message: 'All fields are required',
-      });
-    }
-
-    // match password and confirmPassword
-    if (password !== confirmPassword) {
-      return res.status(400).json({
-        success: false,
-        message: 'Password and Confirm Password Does not match, Please try again.'
-      });
-    }
-
-    // Normalize email for consistency (lowercase)
-    const normalizedEmail = String(email).trim().toLowerCase();
-
-    // check if user already exists by email
-    const existingUser = await User.findOne({ email: normalizedEmail });
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'User is already registered!',
-      });
-    }
-
-    // find most recent OTP stored in DB and validate with user otp
-    const recentOtp = await OTP.find({ email: normalizedEmail })
-      .sort({ createdAt: -1 })
-      .limit(1);
-
-    if (recentOtp.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'OTP Not Found!',
-      });
-    }
-
-    const isOtpValid = await bcrypt.compare(
-      otp,
-      recentOtp[0].otp
-    );
-
-    if (!isOtpValid) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid OTP!',
-      });
-    }
-
-    // hash password
-    const hashedPassword = await bcrypt.hash(password, 10);   // hashing password with salt rounds = 10
-
-    // create profile entry in DB
-    const ProfileDettails = await Profile.create({
-      gender: null,
-      dateOfBirth: null,
-      about: null,
-      contactNumber: null
-    });
-
-    // create user entry in users collection
-    const user = await User.create({
-      firstName,
-      lastName,
-      password: hashedPassword,                      // store hashed password (important!)
-      email: normalizedEmail,
-      contactNumber,
-      additionalDetails: ProfileDettails._id, // linking profile
-      accountType,                            // duplicate key in original code — left unchanged as requested
-      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
-    });
-
-    // return success response
-    res.status(200).json({
-      success: true,
-      message: 'User is registered Successfully',
-    });
-
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: 'User cannot be registered, Please try again',
-    });
-  }
-}
-=======
 //signup 
 const signUp = async (req, res) => {
   // console.log("Signup Body:", req.body);
@@ -385,7 +182,6 @@ const signUp = async (req, res) => {
   }
 };
 
->>>>>>> 89c774f (Initial backend upload)
 //login
 const login = async (req, res) => {
   try {
@@ -416,11 +212,7 @@ const login = async (req, res) => {
     }
 
     // Compare password
-<<<<<<< HEAD
-    const isPasswordCorrect = bcrypt.compare(password, user.password);
-=======
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
->>>>>>> 89c774f (Initial backend upload)
     if (!isPasswordCorrect) {
       return res.status(401).json({
         success: false,
@@ -479,63 +271,6 @@ const login = async (req, res) => {
   }
 }
 
-<<<<<<< HEAD
-// const refreshToken = async (req, res) => {
-//    try {
-//     // Get refresh token from cookies
-//     const refreshToken = req.cookies.refreshToken;
-
-//     if (!refreshToken) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "Refresh token not found",
-//       });
-//     }
-
-//     // Verify refresh token
-//     const decoded = jwt.verify(
-//       refreshToken,
-//       process.env.JWT_REFRESH_SECRET
-//     );
-
-//     // Find user
-//     const user = await User.findById(decoded.id);
-//     if (!user) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "User not found",
-//       });
-//     }
-
-//     // Create NEW access token
-//     const newAccessToken = jwt.sign(
-//       {
-//         id: user._id,
-//         email: user.email,
-//         accountType: user.accountType,
-//       },
-//       process.env.JWT_SECRET,
-//       { expiresIn: "15m" }
-//     );
-
-//     // Send new access token
-//     return res.status(200).json({
-//       success: true,
-//       accessToken: newAccessToken,
-//     });
-
-//   } catch (error) {
-//     console.error("Refresh Token Error:", error);
-//     return res.status(401).json({
-//       success: false,
-//       message: "Invalid or expired refresh token",
-//     });
-//   }
-// };
-
-//changePassword
-//TODO: Home Work
-=======
 const refreshToken = async (req, res) => {
    try {
     // Get refresh token from cookies
@@ -588,8 +323,6 @@ const refreshToken = async (req, res) => {
     });
   }
 };
-
->>>>>>> 89c774f (Initial backend upload)
 
 // change password
 const changePassword = async (req, res) => {
@@ -661,9 +394,4 @@ const changePassword = async (req, res) => {
   }
 };
 
-
-<<<<<<< HEAD
-export { sendOTP, signUp, login,  changePassword };
-=======
 export { sendOTP, signUp, login, changePassword, refreshToken };
->>>>>>> 89c774f (Initial backend upload)

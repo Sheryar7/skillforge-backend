@@ -34,11 +34,7 @@ const courseSchema = new mongoose.Schema({
         type: String
     },
     tag: {
-<<<<<<< HEAD
-        type: [String] 
-=======
         type: [String]
->>>>>>> 89c774f (Initial backend upload)
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
@@ -51,16 +47,6 @@ const courseSchema = new mongoose.Schema({
             ref: 'User',
             require: true
         }
-<<<<<<< HEAD
-    ], 
-    status:{
-        type: [String],
-        enum: ['Draft','Published']
-    }
-});
-
-export const Course = mongoose.model("Course" , courseSchema);
-=======
     ],
     status: {
         type: String,
@@ -73,4 +59,3 @@ export const Course = mongoose.model("Course" , courseSchema);
 
 export const Course = mongoose.model("Course", courseSchema);
 
->>>>>>> 89c774f (Initial backend upload)

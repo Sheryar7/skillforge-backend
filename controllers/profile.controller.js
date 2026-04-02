@@ -1,115 +1,3 @@
-<<<<<<< HEAD
-import {Profile} from "../models/profile.model.js";
-import {User} from "../models/user.model.js";
-// const Course = require('../models/Course');
- 
-const updateProfile = async (req, res) => {
-    try {
-        //data fetch
-        const { dateOfBirth = "", about = "", gender, contactNumber } = req.body;
-        //get userId
-        const id = req.user.id;
-        //validation
-        if (!gender || !contactNumber || !id) {
-            return res.status(400).json({
-                success: false,
-                message: 'All Field Required!',
-            });
-        }
-        //find profile
-        const userDetails = await User.findById(id);
-        const profileId = userDetails.additionalDetails;
-        const profileDetails = await Profile.findById(profileId);
-        //update profile in DB
-        profileDetails.dateOfBirth = dateOfBirth;
-        profileDetails.about = about;
-        profileDetails.gender = gender;
-        profileDetails.contactNumber = contactNumber;
-        profileDetails.save();
-        
-        //return res
-        return res.status(200).json({
-            success: true,
-            message: 'Profile created successfully.',
-            profileDetails,
-        });
-    } catch (error) {
-        console.error('Error in Updating Profile:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Something went wrong while Updating Profile!',
-            error: error.message,
-        });
-    }
-}
- 
-const deleteAccount = async (req, res) => {
-    try {
-        // get user id from req.user (comes from auth middleware)
-        const id = req.user.id; 
-        //validation
-        const userDetails = await User.findById(id);
-        if (!userDetails) {
-            return res.status(404).json({
-                success: false,
-                message: 'User Not Found!'
-            });
-        }
-        // delete profile document using profile ObjectId stored in userDetails
-        await Profile.findByIdAndDelete(userDetails.additionalDetails);     //this is the best one / clean and correct
-        // await Profile.findByIdAndDelete({_id:userDetails.additionalDetails}); babbar bhai did this in tutorial / ✔ Option 2 (Object filter form) / This also works, but unnecessary.
-        
-        await User.findByIdAndDelete({_id:id});
-        //return res
-        return res.status(200).json({
-            success: true,
-            message: 'Account Deleted Successfully.', 
-        });
-    } catch (error) {
-        console.error('Error in Deleting Account:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Something went wrong while Deleting Account!',
-            error: error.message,
-        });
-    }
-}
-
-const getAllUserDetails = async (req, res) => {
-    try {
-        // Get user ID from token (auth middleware)
-        const id = req.user.id;
-
-        // Fetch user and also populate the profile
-        const userDetails = await User.findById(id)
-            .populate("additionalDetails")   // get profile info
-            .exec();
-
-        // If user doesn't exist
-        if (!userDetails) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found!"
-            });
-        }
-
-        // Return the user details
-        return res.status(200).json({
-            success: true,
-            message: "User Data Fetched Successfully.",
-            data: userDetails,
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
-};
-
-export{updateProfile , deleteAccount , getAllUserDetails};
-=======
 import { Profile } from "../models/profile.model.js";
 import { User } from "../models/user.model.js";
 import uploadFile from "../utils/imageUploader.js";
@@ -167,7 +55,6 @@ const deleteAccount = async (req, res) => {
     }
     //dlt profile
     await Profile.findByIdAndDelete({ _id: user.additionalDetails })
-    // dlt fron enrolled users
     //dlt user
     await User.findByIdAndDelete({ _id: id })
 
@@ -331,4 +218,3 @@ export {
   instructorDashboard,
   becomeInstructor
 };
->>>>>>> 89c774f (Initial backend upload)

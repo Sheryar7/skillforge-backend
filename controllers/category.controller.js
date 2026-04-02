@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import {Category} from "../models/category.model.js"
-import { Course } from "../models/course.model.js";
- 
-=======
 import { Category } from "../models/category.model.js"
 import { Course } from "../models/course.model.js";
 
->>>>>>> 89c774f (Initial backend upload)
 const createCategory = async (req, res) => {
     try {
         //fetch data
@@ -36,29 +30,18 @@ const createCategory = async (req, res) => {
         });
     }
 }
-<<<<<<< HEAD
- 
-const showAllCategories = async (req, res) => {
-    try {
-        const allCattgory = await Category.find({}, { name: true, description: true });
-        console.log("All Category: ",allCattgory);
-=======
+
 
 const showAllCategories = async (req, res) => {
     try {
         const allCategory = await Category.find({}, { name: true, description: true });
-        console.log("All Category: ", allCategory);
->>>>>>> 89c774f (Initial backend upload)
+        console.log("All Category: ", allCategory); 
 
         return res.status(200).json({
             success: true,
             message: 'All Categories return Successfully.',
-<<<<<<< HEAD
-            allCattgory
-=======
             data: allCategory
 
->>>>>>> 89c774f (Initial backend upload)
         });
     } catch (error) {
         return res.status(500).json({
@@ -67,11 +50,7 @@ const showAllCategories = async (req, res) => {
         });
     }
 }
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> 89c774f (Initial backend upload)
 const categoryPageDetails = async (req, res) => {
     try {
         //get category
@@ -92,23 +71,6 @@ const categoryPageDetails = async (req, res) => {
             _id: { $ne: categoryId },
         }).populate('courses').exec();
 
-        //get top selling courses
-        //HW:write it on your own
-<<<<<<< HEAD
-        const allCategory= await Category.find()
-                                        .populate({
-                                            path:"courses",
-                                            match:{status: "published"},
-                                            populate:{
-                                                path:"instructor",
-                                                populate:"additionalDetails"
-                                            }
-                                        }) .exec();
-
-            const allCourses = allCategory.flatMap((category) => category.courses);
-            console.log("allCourses", allCourses)
-            const mostSellingCourse = allCourses.sort((a,b) => b.sold - a.sold).slice(0,10)
-=======
         const allCategory = await Category.find()
             .populate({
                 path: "courses",
@@ -122,7 +84,6 @@ const categoryPageDetails = async (req, res) => {
         const allCourses = allCategory.flatMap((category) => category.courses);
         console.log("allCourses", allCourses)
         const mostSellingCourse = allCourses.sort((a, b) => b.sold - a.sold).slice(0, 10)
->>>>>>> 89c774f (Initial backend upload)
 
         //return res
         return res.status(200).json({
@@ -140,8 +101,4 @@ const categoryPageDetails = async (req, res) => {
     }
 }
 
-<<<<<<< HEAD
-export {createCategory , showAllCategories , categoryPageDetails};
-=======
 export { createCategory, showAllCategories, categoryPageDetails };
->>>>>>> 89c774f (Initial backend upload)

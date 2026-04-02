@@ -114,11 +114,7 @@ const getAvgRating = async (req, res) => {
 const getAllRatings = async (req, res) => {
     try {
         const allReviews = await RatingAndReview.find({})
-<<<<<<< HEAD
-            .sort({ rating: desc })
-=======
             .sort({ rating: -1 })
->>>>>>> 89c774f (Initial backend upload)
             .populate({
                 path: "course",
                 select: "courseName"
@@ -133,22 +129,12 @@ const getAllRatings = async (req, res) => {
                 success: true,
                 message: "All Reviews fetched successfully",
                 data: allReviews,
-<<<<<<< HEAD
-            });
-
-    } catch (error) {
-        return res.status(500).json({
-                success: false,
-                message: error.message,
-=======
             }); 
 
     } catch (error) { 
         return res.status(500).json({
                 success: false,
                 message: error.message,
-
->>>>>>> 89c774f (Initial backend upload)
             });
     }
 }

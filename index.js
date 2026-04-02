@@ -10,8 +10,10 @@ app.use(express.json());
 import auth  from "./routes/auth.js"
 import course  from "./routes/course.js"
 import profile  from "./routes/profile.js"
+import profileRoutes from "./routes/profile.js";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
+
 
 app.use(cors({
     origin:process.env.Frontend_URL,
@@ -25,6 +27,7 @@ app.use(fileUpload({
 app.use("/api/v1/auth",auth);
 app.use("/api/v1/profile",profile);
 app.use("/api/v1/course",course);
+app.use("/api/v1/profile", profileRoutes);
 app.get("/", (req, res)=>{
     res.send( "<h1>Home Page</h2>" )
 })

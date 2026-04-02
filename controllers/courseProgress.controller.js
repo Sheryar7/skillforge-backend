@@ -22,17 +22,10 @@ const updateCrourseProgress = async (req, res) => {
     if (!courseProgress) {
       return res.status(404).json({ message: "Course progress not found" });
     } else {
-<<<<<<< HEAD
-      const completedVedios = courseProgress.completedVedios;
-
-      //check if vedio is already marked as completed
-      if (completedVedios.includes(subSectionId)) {
-=======
       const completedVideos = courseProgress.completedVideos;
 
       //check if vedio is already marked as completed
-      if (completedVideos.includes(subSectionId)) {
->>>>>>> 89c774f (Initial backend upload)
+      if (completedVideos.includes(subSectionId)) { 
         return res
           .status(400)
           .json({
@@ -40,11 +33,7 @@ const updateCrourseProgress = async (req, res) => {
             message: "Video already marked as completed",
           });
       } else {
-<<<<<<< HEAD
-        courseProgress.completedVedios.push(subSectionId);
-=======
         courseProgress.completedVideos.push(subSectionId);
->>>>>>> 89c774f (Initial backend upload)
         await courseProgress.save();
         return res
           .status(200)
@@ -61,11 +50,7 @@ const updateCrourseProgress = async (req, res) => {
 const getCourseProgess = async (req, res) => {
   try {
     const { courses } = req.body;
-<<<<<<< HEAD
-    const userId = req.user.userId;
-=======
-    const userId = req.user.id;
->>>>>>> 89c774f (Initial backend upload)
+    const userId = req.user.id; 
     console.log("courses ", courses);
     console.log("userId ", userId);
     const progress = await CourseProgress.find({
@@ -73,11 +58,7 @@ const getCourseProgess = async (req, res) => {
       courseId: { $in: courses },
     })
       .populate({ path: "courseId" ,populate: { path: "courseContent" , populate: { path: "subSection" }}})
-<<<<<<< HEAD
-      .populate("completedVedios")
-=======
       .populate("completedVideos")
->>>>>>> 89c774f (Initial backend upload)
       .exec();
     console.log("progress", progress);
     if (progress.length === 0) {
@@ -93,13 +74,8 @@ const getCourseProgess = async (req, res) => {
             subsecLength += section.subSection.length
         })
 
-<<<<<<< HEAD
-       const completedVediosLength = course.completedVideos.length
-       const courseProgress = Math.floor((completedVediosLength / subsecLength) * 100)
-=======
        const completedVideosLength = course.completedVideos.length
        const courseProgress = Math.floor((completedVideosLength / subsecLength) * 100)
->>>>>>> 89c774f (Initial backend upload)
 
         let courseLength={ id:course.courseId._id, progress:courseProgress }
         progressArray.push(courseLength)

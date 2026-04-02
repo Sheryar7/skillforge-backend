@@ -1,35 +1,3 @@
-// import {v2 as cloudinary} from "cloudinary"
-// // Helper function to upload a file to Cloudinary
-// const uploadImageToCloudinary = async (file, folder, height, quality) => { 
-//     // Create an options object that will be sent to Cloudinary
-//     // 'folder' tells Cloudinary where to store your file
-//     const options = { folder };
-
-//     // If height is provided, add it to options
-//     // This lets Cloudinary resize the image to the given height
-//     if (height) {
-//         options.height = height;
-//     }
-
-//     // If quality is provided, add it to options
-//     // Quality reduces image size (e.g., 80, 50, 20)
-//     if (quality) {
-//         options.quality = quality;
-//     }
-
-//     // Allow Cloudinary to automatically detect file type
-//     // Useful because Cloudinary can upload images, videos, pdfs, etc.
-//     options.resource_type = 'auto';
-
-//     // Upload the file to Cloudinary
-//     // file.tempFilePath = temporary file path created by express-fileupload
-//     // 'options' includes folder, height, quality, resource_type
-//     return await cloudinary.uploader.upload(file.tempFilePath, options);
-// };
-
-// export default uploadImageToCloudinary;
-
-
 import path from 'path';
 // import { fileURLToPath } from 'url';
 import {v2 as cloudinary} from "cloudinary"

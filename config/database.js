@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
-<<<<<<< HEAD
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const connectDB = async () => {
-=======
-import dotenv from "dotenv";
-dotenv.config();
-const connectDB = async () => {
-    //connect to local mongodb campus database
->>>>>>> 89c774f (Initial backend upload)
+    // Connect to MongoDB using the URL from environment variables
     mongoose
         .connect(process.env.MONGODB_URL)
         .then(() => console.log("💚 Database connected successfully"))
@@ -17,4 +14,5 @@ const connectDB = async () => {
             process.exit(1);
         });
 };
+
 export default connectDB;

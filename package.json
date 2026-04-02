@@ -18,10 +18,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "crypto-random-string": "^5.0.0",
-<<<<<<< HEAD
-=======
     "dns": "^0.2.2",
->>>>>>> 89c774f (Initial backend upload)
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-fileupload": "^1.5.2",
@@ -29,16 +26,10 @@
     "mongoose": "^8.20.2",
     "node-schedule": "^2.1.1",
     "nodemailer": "^7.0.11",
-<<<<<<< HEAD
-    "nodemon": "^3.1.11",
-    "otp-generator": "^4.0.1",
-    "speakeasy": "^2.0.0"
-=======
     "otp-generator": "^4.0.1",
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
->>>>>>> 89c774f (Initial backend upload)
   }
 }
